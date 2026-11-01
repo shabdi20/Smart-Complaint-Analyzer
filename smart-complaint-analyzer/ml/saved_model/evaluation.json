@@ -1,0 +1,9 @@
+{
+  "samples": 240,
+  "test_samples": 60,
+  "accuracy": 0.9833333333333333,
+  "macro_precision": 0.984375,
+  "macro_recall": 0.984375,
+  "macro_f1": 0.9833333333333334,
+  "classification_report": "                              precision    recall  f1-score   support\n\n         Drainage and Sewage       1.00      1.00      1.00         7\nElectricity and Streetlights       1.00      1.00      1.00         7\n                       Other       1.00      1.00      1.00         8\n               Public Safety       1.00      0.88      0.93         8\n            Public Transport       1.00      1.00      1.00         8\n    Roads and Infrastructure       0.88      1.00      0.93         7\n      Sanitation and Garbage       1.00      1.00      1.00         8\n                Water Supply       1.00      1.00      1.00         7\n\n                    accuracy                           0.98        60\n                   macro avg       0.98      0.98      0.98        60\n                weighted avg       0.99      0.98      0.98        60\n"
+}

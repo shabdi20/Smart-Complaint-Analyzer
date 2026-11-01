@@ -1,0 +1,14 @@
+{% extends 'base.html' %}{% block content %}
+<div class="page-head"><h1>Authority notifications</h1><p>Register consenting officials to receive alerts when citizens submit complaints.</p></div>
+<div class="card" style="padding:22px;margin-bottom:20px"><p><strong>Outbound notifications: {{ 'ENABLED' if notifications_enabled else 'DISABLED (safe default)' }}</strong>. Configure .env credentials and set NOTIFICATIONS_ENABLED=1 to send messages. WhatsApp requires an approved Twilio template.</p>
+<h2>Add authority contact</h2><form method="post"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+<label>Authority name <input name="name" required minlength="2" maxlength="120"></label>
+<label>Department <select name="department" required>{% for d in departments %}<option value="{{ d }}">{{ d }}</option>{% endfor %}</select></label>
+<label>Email address <input name="email" type="email" maxlength="254"></label>
+<label>Phone (+country code) <input name="phone" placeholder="+919876543210"></label>
+<p>Notification channels:</p><label><input type="checkbox" name="channels" value="email" checked> Email</label> <label><input type="checkbox" name="channels" value="sms"> SMS</label> <label><input type="checkbox" name="channels" value="whatsapp"> WhatsApp</label>
+<p><label><input type="checkbox" name="consent" value="yes" required> I confirm this authority has agreed to receive these notifications.</label></p>
+<button class="btn" type="submit">Register authority</button></form></div>
+<div class="card table-wrap"><h2>Registered authorities</h2><table><thead><tr><th>Name</th><th>Department</th><th>Email</th><th>Phone</th><th>Channels</th><th>Active</th><th>Action</th></tr></thead><tbody>{% for c in contacts %}<tr><td>{{ c.name }}</td><td>{{ c.department }}</td><td>{{ c.email or '—' }}</td><td>{{ c.phone or '—' }}</td><td>{{ 'Email ' if c.email_enabled else '' }}{{ 'SMS ' if c.sms_enabled else '' }}{{ 'WhatsApp' if c.whatsapp_enabled else '' }}</td><td>{{ 'Yes' if c.active else 'No' }}</td><td><form method="post" action="{{ url_for('admin.toggle_authority',contact_id=c.id) }}"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button type="submit">{{ 'Disable' if c.active else 'Enable' }}</button></form></td></tr>{% else %}<tr><td colspan="7">No authority contacts yet.</td></tr>{% endfor %}</tbody></table></div>
+<div class="card table-wrap" style="margin-top:20px"><h2>Recent delivery attempts</h2><table><thead><tr><th>Complaint</th><th>Authority</th><th>Channel</th><th>Status</th><th>Time (UTC)</th></tr></thead><tbody>{% for d in deliveries %}<tr><td>#{{ d.complaint_id }}</td><td>{{ d.authority.name }}</td><td>{{ d.channel }}</td><td>{{ d.status }}</td><td>{{ d.created_at.strftime('%Y-%m-%d %H:%M') }}</td></tr>{% else %}<tr><td colspan="5">No delivery attempts yet.</td></tr>{% endfor %}</tbody></table></div>
+{% endblock %}
